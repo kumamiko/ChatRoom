@@ -29,7 +29,7 @@ namespace ChatRoom.Controllers
                         string lyricjson = MusicApi.Lyric(musicId);
                         var lyricjsonObj = JsonConvert.DeserializeObject<dynamic>(lyricjson);
                         string lyric = string.Empty;
-                        if (lyricjsonObj.nolyric == null) lyric = lyricjsonObj.lrc.lyric;
+                        if (lyricjsonObj.nolyric == null && lyricjsonObj.uncollected == null) lyric = lyricjsonObj.lrc.lyric;
                         var url = $"http://music.163.com/song/media/outer/url?id={musicId}.mp3";
                         var name = songs[0].name;
                         var artist = songs[0].artists[0].name;
