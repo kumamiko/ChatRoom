@@ -71,6 +71,12 @@ body {
     padding:5px;
 }
 
+.bili {
+    background: white;
+    border-radius: 10px 10px 10px 10px;
+    padding:5px;
+}
+
 .bigger{
 	height:800px;
 }

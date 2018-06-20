@@ -44,7 +44,21 @@ connection.on("ReceiveData", (user, type, data) => {
     } else if (type === "link") {
         encodedMsg = "<div>" + user + "发送了链接<br><a class=\"msg music bounce\" target='view_window' href='" + data + "'>" + data + "</a></div>";
         $("#messagesList").prepend("<li>" + encodedMsg + "</li>");
-    } else if (type === "info") {
+    }else if (type === "bili") {
+        layui.use('layer', function(){
+            var layer = layui.layer;
+  
+            layer.open({
+                type: 2,
+                title: 'bilibili',
+                shadeClose: true,
+                shade: false,
+                maxmin: false, //关闭最大化最小化按钮
+                area: ['893px', '600px'],
+                content: data
+            });
+        });     
+    }else if (type === "info") {
         encodedMsg = "<div class=\"msg music bounce\">" + user + data + "</div>";
         $("#messagesList").prepend("<li>" + encodedMsg + "</li>");
     }
@@ -149,6 +163,33 @@ $("#btnLink").click(function () {
             const type = "link";
             const user = document.getElementById("userInput").value;
             connection.invoke("SendData", roomName, user, type, data).catch(err => console.error(err.toString()));
+        } 
+    });
+});
+
+$("#btnBili").click(function () {
+    swal({
+        title: '请输入B站视频嵌入代码（iframe）',
+        input: 'text',
+        inputAttributes: {
+            autocapitalize: 'off'
+        },
+        animation: false,
+        showCancelButton: true,
+        confirmButtonText: '发送',
+        cancelButtonText:"取消",
+        showLoaderOnConfirm: true,
+        preConfirm: (link) => {
+            const roomName = $("#roomName").text();
+            if(roomName=="") return;
+            const type = "bili";
+            const user = document.getElementById("userInput").value;
+            var reg = /(?<=(src="))[^"]*?(?=")/ig;
+            var data = link.match(reg);
+            if (data != null && data != "") {
+                connection.invoke("SendData", roomName, user, type, data[0]).catch(err => console.error(err.toString()));
+                return;
+            }
         } 
     });
 });
