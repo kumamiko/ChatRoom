@@ -26,11 +26,15 @@ namespace ChatRoom.Controllers
                         string musicId = songs[0].id;
                         string detailjson = MusicApi.Detail(musicId);
                         var detailjsonObj = JsonConvert.DeserializeObject<dynamic>(detailjson);
+                        string lyricjson = MusicApi.Lyric(musicId);
+                        var lyricjsonObj = JsonConvert.DeserializeObject<dynamic>(lyricjson);
+                        string lyric = string.Empty;
+                        if (lyricjsonObj.nolyric == null) lyric = lyricjsonObj.lrc.lyric;
                         var url = $"http://music.163.com/song/media/outer/url?id={musicId}.mp3";
                         var name = songs[0].name;
                         var artist = songs[0].artists[0].name;
                         var cover = detailjsonObj.songs[0].album.picUrl;
-                        return Json(new { code = 0, url = url, name = name, artist = artist, cover = cover, msg = "" });
+                        return Json(new { code = 0, url = url, name = name, artist = artist, cover = cover, lyric = lyric, msg = "" });
                     }
                 }
                 return Json(new { code = 1,  msg = "获取音乐链接失败" });

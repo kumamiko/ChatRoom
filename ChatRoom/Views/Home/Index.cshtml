@@ -1,13 +1,13 @@
 ﻿@{
     ViewData["Title"] = "首页";
- }
+}
 <div class="container">
     <div class="row" style="padding-top:10px;padding-bottom:10px;">
         <span class="layui-badge layui-bg-black">房间名：<span id="roomName"></span></span>&nbsp;<span class="layui-badge layui-bg-blue" id="roomCapacity">0</span>
         <button id="btnLeave" class="layui-btn layui-btn-radius layui-bg-black" style="float:right;display:none;">退出</button>
+        <button id="btnRoomList" class="layui-btn layui-btn-radius layui-bg-black" style="float:right;">所有房间</button>
         <button id="btnEnter" class="layui-btn layui-btn-radius layui-bg-red" style="float:right;">加入房间</button>
         <button id="btnCreate" class="layui-bg-red btn-round" style="float:right;"><i class="layui-icon layui-icon-add-1" style="font-size: 20px; color: white;"></i></button>
-        <button id="btnRoomList" class="layui-btn layui-btn-radius layui-bg-red" style="float:right;">获取所有房间信息</button>
     </div>
     <div class="row">
         <input type="text" id="userInput" lay-verify="required" placeholder="请输入昵称" autocomplete="off" class="layui-input">
@@ -26,14 +26,13 @@
     <div class="row">
         <div class="col-6">&nbsp;</div>
         <div class="col-6">
-            <ul id="messagesList">
-                
-            </ul>
+            <ul id="messagesList"></ul>
         </div>
     </div>
 </div>
 
-<div id="aplayer" style="position:fixed;bottom:0px;left:0px;width:100%;"></div>
+@*<div id="aplayer" style="position:fixed;bottom:0px;left:0px;"></div>*@
+<div id="aplayer"></div>
 
 <script src="~/lib/jquery/jquery.cookie.js"></script>
 <script src="~/js/site.js"></script>

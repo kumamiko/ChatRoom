@@ -28,20 +28,19 @@ connection.on("ReceiveData", (user, type, data) => {
         encodedMsg = "<div class=\"msg music bounce\">" + user + " 点播了 " + dataObj.name + "</div>";
         $("#messagesList").prepend("<li>" + encodedMsg + "</li>");
 
-        const ap = new APlayer({
-            container: document.getElementById('aplayer'),
-            loop:'none',
-            audio: [{
-                name: dataObj.name,
-                artist: dataObj.artist,
-                url: dataObj.url,
-                cover: dataObj.cover + '?param=80x80'
-            }]
-        });
+        ap.list.show();
+        ap.list.add([{
+            name: dataObj.name,
+            artist: dataObj.artist,
+            url: dataObj.url,
+            cover: dataObj.cover + '?param=80x80',
+            lrc: dataObj.lyric
+        }]);
+        ap.skipForward();
         ap.play();
     } else if (type === "image") {
       //图片添加放大事件
-        encodedMsg = "<div>" + user + "发送了图片<br><br><img class=\"msg image bounce\" src='" + data + "' onclick=\"$(this).toggleClass('bigger')\"></div>";
+        encodedMsg = "<div>" + user + "发送了图片<br><br><a data-fancybox=\"gallery\" href="+ data +"><img class=\"msg image bounce\" src='" + data + "' ></div>";
         $("#messagesList").prepend("<li>" + encodedMsg + "</li>");
     } else if (type === "link") {
         encodedMsg = "<div>" + user + "发送了链接<br><a class=\"msg music bounce\" target='view_window' href='" + data + "'>" + data + "</a></div>";
@@ -92,7 +91,7 @@ $("#btnMusic").click(function () {
                         const type = "music";
                         const roomName = $("#roomName").text();
                         const user = document.getElementById("userInput").value;
-                        var jsonObj = { name: result.name, artist: result.artist, url: result.url, cover: result.cover };
+                        var jsonObj = { name: result.name, artist: result.artist, url: result.url, cover: result.cover, lyric: result.lyric };
                         const data = JSON.stringify(jsonObj);
                         //发送音乐链接
                         connection.invoke("SendData", roomName, user, type, data).catch(err => console.error(err.toString()));

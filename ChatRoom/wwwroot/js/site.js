@@ -49,3 +49,12 @@ function checkCookie() {
 }
 
 checkCookie(); 
+
+const ap = new APlayer({
+    container: document.getElementById('aplayer'),
+    loop: 'none',
+    fixed: true,
+    lrcType: 1,
+    listFolded: false,
+    listMaxHeight: 90,
+});
