@@ -16,10 +16,21 @@ namespace ChatRoom.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> List(string name, int limit)
+        public async Task<IActionResult> List(string name, int limit, int page)
         {
             var histories = await _context.Histories
                     .Where(t => t.RoomName == name)
+                    .AsNoTracking()
+                    .OrderByDescending(t => t.Id)
+                    .Skip((page - 1) * limit).Take(limit)
+                    .ToListAsync();
+            return Json(new { code = 0, msg = "", data = histories });
+        }
+
+        public async Task<IActionResult> PastList(string name, int limit, int id)
+        {
+            var histories = await _context.Histories
+                    .Where(t => t.RoomName == name && t.Id < id)
                     .AsNoTracking()
                     .OrderByDescending(t => t.Id)
                     .Take(limit)

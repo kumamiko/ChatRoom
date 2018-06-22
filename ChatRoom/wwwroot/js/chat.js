@@ -277,13 +277,15 @@ $("#btnEnter").click(function () {
                                     $("#roomCapacity").text(result.data.capacity);
                                 }
                             });
-                    		$.get("/history/list",{name:roomName,limit:30}, function(result){ 
+                    		$.get("/history/list",{name:roomName,limit:20, page:1}, function(result){ 
                     			if(result.code=== 0){
                                     var html = '';
                                     for(var o in result.data){
                                       html+="<li><div class=\"msg others bounce\"><pre>"+result.data[o].createTime+"  "+result.data[o].userName+" : "+result.data[o].content+"</pre></div></li>";
+                                    }
+                                    $("#messagesList").prepend(html);
+                                    $("#historyId").text(result.data[result.data.length-1].id);
                                 }
-                    			$("#messagesList").prepend(html);}
                     		});
                    		    $("#btnCreate").hide();
                             $("#btnEnter").hide();
@@ -337,6 +339,7 @@ $("#btnLeave").click(function () {
             $("#btnLeave").hide();
             $("#roomName").text("");
             $("#roomCapacity").text("0");
+            $("#linkMore").text("更多历史记录");
             document.getElementById("messagesList").innerHTML = "";
         }
     })
@@ -359,5 +362,26 @@ $("#btnRoomList").click( function () {
                 showConfirmButton: false
             })
         } 
+    });
+});
+
+//获取历史
+$("#linkMore").click(function () {
+    if ($("#linkMore").text() === "没有更多历史记录") return;
+    const currentid = $("#historyId").text();
+    const roomName = $("#roomName").text(); 
+    $.get("/history/pastList",{name:roomName,limit:20, id:currentid}, function(result){ 
+        if(result.code=== 0){
+            var html = '';
+            if (result.data.length > 0) {
+                for (var o in result.data) {
+                    html += "<li><div class=\"msg others bounce\"><pre>" + result.data[o].createTime + "  " + result.data[o].userName + " : " + result.data[o].content + "</pre></div></li>";
+                }
+                $("#messagesList").append(html);
+                $("#historyId").text(result.data[result.data.length - 1].id);
+            } else {
+                $("#linkMore").text("没有更多历史记录");
+            }
+        }
     });
 });
