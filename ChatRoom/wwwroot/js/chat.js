@@ -37,6 +37,7 @@ connection.on("ReceiveData", (user, type, data) => {
             lrc: dataObj.lyric
         }]);
         ap.skipForward();
+        ap.play();
     } else if (type === "image") {
       //图片添加放大事件
         encodedMsg = "<div>" + user + "发送了图片<br><br><a data-fancybox=\"gallery\" href="+ data +"><img class=\"msg image bounce\" src='" + data + "' ></div>";
