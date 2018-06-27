@@ -36,7 +36,8 @@ connection.on("ReceiveData", (user, type, data) => {
             cover: dataObj.cover + '?param=80x80',
             lrc: dataObj.lyric
         }]);
-        ap.skipForward();
+        //ap.skipForward();
+        ap.list.switch(ap.list.audios.length - 1);
         ap.play();
     } else if (type === "image") {
       //图片添加放大事件
@@ -51,12 +52,20 @@ connection.on("ReceiveData", (user, type, data) => {
   
             layer.open({
                 type: 2,
-                title: 'bilibili',
+                title: data,
                 shadeClose: true,
                 shade: false,
-                maxmin: false, //关闭最大化最小化按钮
+                maxmin: true, //关闭最大化最小化按钮
                 area: ['893px', '600px'],
-                content: data
+                content: data,
+                resizing: function(layero) {
+					var index = layero[0].id.substr(layero[0].id.length-1,1);
+                    var iframeId = "layui-layer-iframe" + index;
+                    var layerId = "layui-layer" + index;
+                    var iframe=document.getElementById(iframeId); 
+                    var layer =document.getElementById(layerId);
+                    iframe.style.height = (parseInt(layer.style.height) - 45) + "px";
+                }
             });
         });     
     }else if (type === "info") {
@@ -170,7 +179,7 @@ $("#btnLink").click(function () {
 
 $("#btnBili").click(function () {
     swal({
-        title: '请输入B站视频嵌入代码（iframe）',
+        title: '请输入链接',
         input: 'text',
         inputAttributes: {
             autocapitalize: 'off'
@@ -185,10 +194,8 @@ $("#btnBili").click(function () {
             if(roomName=="") return;
             const type = "bili";
             const user = document.getElementById("userInput").value;
-            var reg = /(?<=(src="))[^"]*?(?=")/ig;
-            var data = link.match(reg);
-            if (data != null && data != "") {
-                connection.invoke("SendData", roomName, user, type, data[0]).catch(err => console.error(err.toString()));
+            if (link != null && link != "") {
+                connection.invoke("SendData", roomName, user, type, link).catch(err => console.error(err.toString()));
                 return;
             }
         } 
