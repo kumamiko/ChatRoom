@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ChatRoom.Services.NeteaseMusic;
 using Microsoft.AspNetCore.Mvc;
-using MP.Core;
 using Newtonsoft.Json;
+using System;
 
 namespace ChatRoom.Controllers
 {
@@ -15,7 +12,7 @@ namespace ChatRoom.Controllers
         {
             try
             {
-                string json = MP.Core.MusicApi.Search(id, 1, 0, 1);
+                string json = MusicApi.Search(id, 1, 0, 1);
                 var jsonObj = JsonConvert.DeserializeObject<dynamic>(json);
                 var result = jsonObj.result;
                 if (result != null)
